@@ -1,0 +1,29 @@
+.header {
+/* position: relative NO mueve el div. Se usa para que todos los elementos hijos con position: absolute se posicionen RELATIVOS a este contenedor y no respecto a toda la página (body). */
+  position: relative;
+  height: 25rem; 
+}
+
+.header img {
+  width: 100%;  /*ocupa todo el ancho del contenedor .header*/
+  height: 100%; /*ocupa todo el alto del contenedor  .header*/
+  object-fit: cover; /*no se deforma, mantiene proporción y recorta lo que sobre.*/
+  filter: brightness(0.6); /* Reduce el brillo de la imagen. 1 = brillo normal; < 1 = imagen más oscura; > 1 = imagen más clara */
+}
+
+.header h1,
+.header p{
+  position: absolute; /*Esto permite que el texto se coloque encima de la imagen sin moverla. Además, habilita el uso de top, left, right y bottom para posicionar el elemento manualmente dentro del contenedor que tenga position: relative.*/   
+  left: 50%;   /*lo lleva al medio horizontal*/
+  transform: translate(-50%); /*lo ajusta porque si no, quedaría “centrado desde la esquina” del texto, no desde el centro*/
+  margin: 0;
+  color: white;
+}
+
+.header h1 {
+  top: 40%; /*lo baja al medio vertical*/
+}
+
+.header p {
+  top: 52%; /*lo baja al medio vertical*/
+}

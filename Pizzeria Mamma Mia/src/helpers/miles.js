@@ -1,0 +1,1 @@
+export const miles = (n) => n.toLocaleString("es-CL")
