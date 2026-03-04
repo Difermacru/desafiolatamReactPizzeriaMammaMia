@@ -1,4 +1,5 @@
-import Header from "./Header"
+import { Link } from "react-router-dom";
+import Header from "../components/Header";
 //import CardPizza from "./CardPizza"
 import { useEffect, useState } from "react"; // Importamos hooks
 
@@ -50,7 +51,13 @@ function Home() {
               </ul>
 
               <div className="card-body">
-                <a href="#" className="btn btn-light me-2">Ver Mas</a>
+                <Link 
+                  className="btn btn-light me-2" 
+                  to="/pizza/p001" 
+                >
+                  Ver Mas
+                </Link>
+
                 <a href="#" className="btn btn-dark">Añadir</a>
               </div>
             </div>
