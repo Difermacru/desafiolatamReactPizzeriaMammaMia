@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { miles } from "../helpers/miles";
 
 function NavBar() {
@@ -15,9 +16,13 @@ function NavBar() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
             <form className="container-fluid justify-content-start">
-              <button className="btn btn-outline-light  me-2" type="button">
+              <Link 
+                className="btn btn-outline-light  me-2" 
+                type="button"
+                to="/"            
+              >
                 Home
-              </button>
+              </Link>
 
               {token?(
                 <>
@@ -25,30 +30,51 @@ function NavBar() {
                         Profile
                     </button>
 
-                    <button className="btn btn-outline-light  me-2" type="button">
+                    <Link 
+                      className="btn btn-outline-light  me-2" 
+                      type="button"
+                      to="/login"
+                    >
                         Logout
-                    </button>
+                    </Link>
                 </>
 
               ):(
 
                 <>
-                    <button className="btn btn-outline-light  me-2" type="button">
+                    <Link 
+                      className="btn btn-outline-light  me-2" 
+                      type="button"
+                      to="/login"
+                    >
                         Login
-                    </button>
+                    </Link>
 
-                    <button className="btn btn-outline-light  me-2" type="button">
+                    <Link 
+                      className="btn btn-outline-light  me-2" 
+                      type="button"
+                      to="/register"
+                    
+                    >
                         Register
-                    </button>
+                    </Link>
+
+                    <Link className="btn btn-outline-light me-2" to="/profile">
+                      Profile
+                    </Link>
                 </>
               )}
      
             </form>
 
             <form className="d-flex">
-                <button className="btn btn-sm btn-outline-secondary" type="button">
+                <Link 
+                    className="btn btn-sm btn-outline-secondary" 
+                    type="button"
+                    to= "/cart"
+                >
                     Total : ${miles(total)}
-                </button>
+                </Link>
             </form>
 
           </div>
