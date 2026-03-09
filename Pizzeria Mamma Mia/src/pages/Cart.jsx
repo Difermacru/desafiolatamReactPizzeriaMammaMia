@@ -1,40 +1,54 @@
-import { useState } from "react";
-import "../cart.css"
-import { pizzaCart } from "../pizzas";
+import { useContext } from "react";
+import "../cart.css";
+import { CartContext } from "../context/CartContext";
 
 const Cart = () => {
-    const [cardPizza, setCardPizza] = useState(pizzaCart);
+    // Obtiene del contexto el carrito y la función para actualizarlo
+    const { cart, setCart } = useContext(CartContext);
 
     const MIN_ITEMS = 1;
 
     function incrementarCantidad(id) {
-        const actualizarCantidad = cardPizza.map((item) => {
+        const actualizarCantidad = cart.map((item) => {
             if (item.id === id) {
                 return {
                     ...item,
-                    count: item.count + 1,
+
+                    // Se usa quantity porque esa propiedad fue creada
+                    // en el context cuando la pizza se agregó al carrito
+                    quantity: item.quantity + 1,
                 };
             }
             return item;
         });
-        setCardPizza(actualizarCantidad);
+
+        // Actualiza el carrito que viene del context
+        setCart(actualizarCantidad);
     }
 
     function decrementarCantidad(id) {
-        const actualizarCantidad = cardPizza.map((item) => {
-            if (item.id === id && item.count > MIN_ITEMS) {
+        const actualizarCantidad = cart.map((item) => {
+            if (item.id === id) {
                 return {
                     ...item,
-                    count: item.count - 1,
+
+                    // Se modifica quantity porque esa es la propiedad
+                    // que el context guarda para la cantidad
+                    quantity: item.quantity - 1,
                 };
             }
             return item;
-        });
-        setCardPizza(actualizarCantidad);
+        })
+         // Si la cantidad llega a 0, la elimina del carrito
+        .filter((item) => item.quantity >= MIN_ITEMS);
+
+        // Actualiza el carrito compartido del context
+        setCart(actualizarCantidad);
     }
 
-    const totalPagar = cardPizza.reduce((acumulador, pizza) => {
-        return acumulador + pizza.price * pizza.count;
+    const totalPagar = cart.reduce((acumulador, pizza) => {
+        // cart viene del context y quantity también fue creada allí
+        return acumulador + pizza.price * pizza.quantity;
     }, 0);
 
     return (
@@ -42,11 +56,10 @@ const Cart = () => {
             <h1>Detalles del pedido:</h1>
 
             <div className="d-flex justify-content-center">
-
                 <table className="table w-auto">
                     <tbody>
-                        {cardPizza.map((pizza, index) => (
-                            <tr key={index}>
+                        {cart.map((pizza) => (
+                            <tr key={pizza.id}>
                                 <td>
                                     <img src={pizza.img} alt="pizza1" />
                                 </td>
@@ -55,7 +68,7 @@ const Cart = () => {
 
                                 <td className="fw-bold ps-5">{pizza.price}</td>
 
-                                <td className="flex align-items-start gap-4">
+                                <td>
                                     <button
                                         type="button"
                                         className="btn btn-dark"
@@ -63,7 +76,10 @@ const Cart = () => {
                                     >
                                         -
                                     </button>
-                                    <span className="mx-3 fw-bold">{pizza.count}</span>
+
+                                    {/* Muestra la cantidad que viene del context */}
+                                    <span className="mx-3 fw-bold">{pizza.quantity}</span>
+
                                     <button
                                         type="button"
                                         className="btn btn-dark"
@@ -75,23 +91,24 @@ const Cart = () => {
                             </tr>
                         ))}
                     </tbody>
-                    
-                    <p className="text-end">
-                        Total pagar: <span className="fw-bold">${totalPagar}</span>
-                    </p>
-
-                    <button
-                        type="button"
-                        className="btn btn-dark"
-                    >
-                        Pagar
-                    </button>
                 </table>
             </div>
+
+            <p className="text-center">
+                Total pagar: <span className="fw-bold">${totalPagar}</span>
+            </p>
+
+            <div className="text-center">
+                <button
+                    type="button"
+                    className="btn btn-dark"
+                >
+                    Pagar
+                </button>
+            </div>
+
         </>
     );
 };
 
 export default Cart;
-
-

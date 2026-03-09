@@ -1,33 +1,21 @@
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
-//import CardPizza from "./CardPizza"
-import { useEffect, useState } from "react"; // Importamos hooks
+import { CartContext } from "../context/CartContext";
+import { useContext } from "react";
+import { PizzasContext } from "../context/PizzasContext";
+
 
 function Home() {
+  // Obtiene addToCart desde el context para poder agregar pizzas al carrito compartido
+  const { addToCart } = useContext(CartContext);
+  const { pizzas, loading } = useContext(PizzasContext);
 
-  // Guardamos la lista de pizzas (array)
-  const [pizzas, setPizzas] = useState([]);
-
-  // Función para consumir la API (trae TODAS las pizzas)
-  const getPizzas = async () => {
-    const res = await fetch("http://localhost:5000/api/pizzas");
-    const data = await res.json();
-    setPizzas(data);
-  };
-
-  // Se ejecuta 1 sola vez al montar el componente
-  useEffect(() => {
-    getPizzas();
-  }, []);
-
+  if (loading) return <p>Cargando pizzas...</p>;
 
   return (
     <div className="home">
 
       <Header />
-      
-      {/* <CardPizza />  */}
-
       <div className="row">
         {pizzas.map((pizza) => (
           <div className="col-12 col-md-4 mb-3" key={pizza.id}>
@@ -51,14 +39,16 @@ function Home() {
               </ul>
 
               <div className="card-body">
-                <Link 
-                  className="btn btn-light me-2" 
-                  to="/pizza/p001" 
+                <Link
+                  className="btn btn-light me-2"
+                  to={`/pizza/${pizza.id}`}
                 >
                   Ver Mas
                 </Link>
 
-                <a href="#" className="btn btn-dark">Añadir</a>
+                {/* Al hacer clic llama a addToCart, que viene del context,
+                    para agregar esta pizza al carrito compartido */}
+                <a href="#" className="btn btn-dark" onClick={() => addToCart(pizza)} >Añadir</a>
               </div>
             </div>
           </div>
