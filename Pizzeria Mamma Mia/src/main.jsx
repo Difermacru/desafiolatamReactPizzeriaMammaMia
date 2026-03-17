@@ -7,6 +7,7 @@ import "./index.css";
 // Importa el provider del contexto del carrito
 import { CartProvider } from "./context/CartContext.jsx";
 import { PizzasProvider } from "./context/PizzasContext.jsx";
+import { UserProvider } from "./context/userContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <CartProvider>
       <BrowserRouter>
         <PizzasProvider>
-          <App />
+          <UserProvider>
+            <App />
+          </UserProvider>
         </PizzasProvider>
       </BrowserRouter>
     </CartProvider>

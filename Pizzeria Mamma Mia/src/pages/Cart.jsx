@@ -1,10 +1,12 @@
 import { useContext } from "react";
 import "../cart.css";
 import { CartContext } from "../context/CartContext";
+import { UserContext } from "../context/userContext";
 
 const Cart = () => {
     // Obtiene del contexto el carrito y la función para actualizarlo
     const { cart, setCart } = useContext(CartContext);
+    const { token } = useContext(UserContext);
 
     const MIN_ITEMS = 1;
 
@@ -102,6 +104,7 @@ const Cart = () => {
                 <button
                     type="button"
                     className="btn btn-dark"
+                    disabled={!token}
                 >
                     Pagar
                 </button>

@@ -48,7 +48,7 @@ function Home() {
 
                 {/* Al hacer clic llama a addToCart, que viene del context,
                     para agregar esta pizza al carrito compartido */}
-                <a href="#" className="btn btn-dark" onClick={() => addToCart(pizza)} >Añadir</a>
+                <Link href="#" className="btn btn-dark" onClick={() => addToCart(pizza)} >Añadir</Link>
               </div>
             </div>
           </div>

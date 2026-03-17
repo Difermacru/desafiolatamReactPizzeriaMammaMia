@@ -1,5 +1,6 @@
 import { pizzas } from "../pizzas";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const CardPizza = () => {
     const [listaPizzas] = useState(pizzas)
@@ -28,8 +29,10 @@ const CardPizza = () => {
                         </ul>
 
                         <div className="card-body">
-                            <a href="#" className="btn btn-light me-2">Ver Mas</a>
-                            <a href="#" className="btn btn-dark">Añadir</a>
+                            <Link to={`/pizza/${pizza.id}`} className="btn btn-light me-2">
+                                Ver Mas
+                            </Link>
+                            <Link href="#" className="btn btn-dark">Añadir</Link>
                         </div>
                     </div>
                 </div>

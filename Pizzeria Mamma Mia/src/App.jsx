@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, Navigate } from "react-router-dom"
 import NavBar from "./components/NavBar"
 import Home from "./pages/Home"
 import Footer from "./components/Footer"
@@ -8,8 +8,12 @@ import Cart from "./pages/Cart"
 import Pizza from "./pages/Pizza"
 import NotFound from "./pages/NotFound"
 import Profile from "./pages/profile"
+import { UserContext } from "./context/userContext"
+import { useContext } from "react";
 
 function App() {
+
+  const { token } = useContext(UserContext);
 
   return (
     <>
@@ -21,9 +25,14 @@ function App() {
           element={<Home/>}
         />
 
+         {/*RUTA PROTEGIDA #3: REGISTER */}
+        {/*Igual que login, se bloquea si ya está logueado
+          Si token = false → puede registrarse
+          Si token = true  → lo redirige al Home
+        */}
         <Route
           path="/register"
-          element={<Register/>}
+          element={!token ? <Register /> : <Navigate to="/" />}
         />
 
         <Route
@@ -46,9 +55,14 @@ function App() {
           element={<NotFound />}
         />
 
-        <Route 
-          path="/profile" 
-          element={<Profile />} 
+         {/*RUTA PROTEGIDA #1: PROFILE */}
+        {/*Esta ruta requiere que el usuario esté logueado
+          Si token = true  → entra a Profile
+          Si token = false → lo redirige a /login
+        */}
+        <Route
+          path="/profile"
+          element={token ? <Profile /> : <Navigate to="/login" />}
         />
          
       </Routes>
