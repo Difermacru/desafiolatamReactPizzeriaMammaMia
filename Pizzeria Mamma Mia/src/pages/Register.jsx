@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../context/userContext";
+import { useNavigate } from "react-router-dom";
+
 
 const Register = () => {
 
-    const [email, setEmail]= useState('');
-    const [password, setPassword]= useState('');
-    const [confirmarPassword, setConfirmarPassword]= useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmarPassword, setConfirmarPassword] = useState('');
 
     //estado que valida los errores
     const [error, setError] = useState("");
 
-     //Función antes de enviar el formulario
-    const validarDatos = (e) => {
+    const { register } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    //Función antes de enviar el formulario
+    const validarDatos = async (e) => {
         e.preventDefault();
 
         //trim() quita espacios al inicio y final.
@@ -28,70 +34,78 @@ const Register = () => {
             return;
         }
 
-        if(password !== confirmarPassword){
+        if (password !== confirmarPassword) {
             //Muestra una alerta avisando que todos los campos son obligatorios
             setError("Elpassword y la confirmación del password deben ser iguales.");
             return;
         }
+        try {
+            await register({
+                email: email.trim(),
+                password: password.trim()
+            });
 
-        // Si el formulario se envía correctamente devolvemos todos nuestros estados al inicial y reseteamos el formulario
-        setError("");
+            setError("");
+            alert("Usuario registrado correctamente");
 
-        setEmail('');
-        setPassword('');
-        setConfirmarPassword('');
+            // redirige al perfil
+            navigate("/");
+
+        } catch {
+            setError("Error al registrar usuario");
+        }
     };
 
-  return (
-    <form className="container mt-4" onSubmit={validarDatos}>
-        {error ? <p className="error">{error}</p> : null}
-        <div className="row justify-content-center">
-            <div className="col-12 col-md-6 col-lg-4">
+    return (
+        <form className="container mt-4" onSubmit={validarDatos}>
+            {error ? <p className="error">{error}</p> : null}
+            <div className="row justify-content-center">
+                <div className="col-12 col-md-6 col-lg-4">
 
-                <h1 >Crea una cuenta nueva</h1>
+                    <h1 >Crea una cuenta nueva</h1>
 
-                <div className="form-floating mt-3 mb-3">
-                    <input
-                        type="email"
-                        className="form-control"
-                        onChange={(e) => setEmail(e.target.value)}
-                        id="floatingInput"
-                        placeholder="name@example.com"
-                        value={email}
-                    />
-                    <label htmlFor="floatingInput">Email address</label>
+                    <div className="form-floating mt-3 mb-3">
+                        <input
+                            type="email"
+                            className="form-control"
+                            onChange={(e) => setEmail(e.target.value)}
+                            id="floatingInput"
+                            placeholder="name@example.com"
+                            value={email}
+                        />
+                        <label htmlFor="floatingInput">Email address</label>
+                    </div>
+
+                    <div className="form-floating mb-3">
+                        <input
+                            type="password"
+                            className="form-control"
+                            onChange={(e) => setPassword(e.target.value)}
+                            id="floatingPassword"
+                            placeholder="Password"
+                            value={password}
+                        />
+                        <label htmlFor="floatingPassword">Password</label>
+                    </div>
+
+                    <div className="form-floating mb-3">
+                        <input
+                            type="password"
+                            className="form-control"
+                            onChange={(e) => setConfirmarPassword(e.target.value)}
+                            id="floatingPassword"
+                            placeholder="Confirmar Password"
+                            value={confirmarPassword}
+                        />
+                        <label htmlFor="floatingPassword">Confirmar Password</label>
+                    </div>
+
+                    <button type="submit" className="btn btn-lg btn-dark w-100">Registrarse</button>
+
                 </div>
-
-                <div className="form-floating mb-3">
-                    <input
-                        type="password"
-                        className="form-control"
-                        onChange={(e) => setPassword(e.target.value)}
-                        id="floatingPassword"
-                        placeholder="Password"
-                        value={password}
-                    />
-                    <label htmlFor="floatingPassword">Password</label>
-                </div>
-
-                <div className="form-floating mb-3">
-                    <input
-                        type="password"
-                        className="form-control"
-                        onChange={(e) => setConfirmarPassword(e.target.value)}
-                        id="floatingPassword"
-                        placeholder="Confirmar Password"
-                        value={confirmarPassword}
-                    />
-                    <label htmlFor="floatingPassword">Confirmar Password</label>
-                </div>
-
-                <button type="submit" className="btn btn-lg btn-dark w-100">Registrarse</button>
-
             </div>
-        </div>
-    </form>
-  );
+        </form>
+    );
 };
 
 export default Register;

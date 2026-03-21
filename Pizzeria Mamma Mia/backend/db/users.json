@@ -1,7 +1,11 @@
 [
   {
     "email": "test@test.com",
+    "password": "123123"
+  },
+  {
+    "email": "dfmarinoc@gmail.com",
     "password": "123123",
-    "id": "UYz_2Vy9rNw7uELQ7AZ8D"
+    "id": "Lr32YZ5mkCc__6GfUuvRF"
   }
 ]

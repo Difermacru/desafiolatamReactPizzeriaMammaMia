@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import "../cart.css";
 import { CartContext } from "../context/CartContext";
 import { UserContext } from "../context/userContext";
@@ -6,9 +6,36 @@ import { UserContext } from "../context/userContext";
 const Cart = () => {
     // Obtiene del contexto el carrito y la función para actualizarlo
     const { cart, setCart } = useContext(CartContext);
+    const [success, setSuccess] = useState("");
     const { token } = useContext(UserContext);
-
+    
     const MIN_ITEMS = 1;
+
+    const handleCheckout = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/api/checkouts", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ cart }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Error al procesar el pago");
+            }
+
+            setSuccess("Compra realizada con éxito ");
+
+            // limpiar carrito
+            setCart([]);
+
+        } catch (error) {
+            console.error(error);
+            alert("Error al realizar la compra");
+        }
+    };
 
     function incrementarCantidad(id) {
         const actualizarCantidad = cart.map((item) => {
@@ -41,8 +68,8 @@ const Cart = () => {
             }
             return item;
         })
-         // Si la cantidad llega a 0, la elimina del carrito
-        .filter((item) => item.quantity >= MIN_ITEMS);
+            // Si la cantidad llega a 0, la elimina del carrito
+            .filter((item) => item.quantity >= MIN_ITEMS);
 
         // Actualiza el carrito compartido del context
         setCart(actualizarCantidad);
@@ -56,6 +83,12 @@ const Cart = () => {
     return (
         <>
             <h1>Detalles del pedido:</h1>
+
+            {success && (
+                <p className="text-success text-center fw-bold">
+                    {success}
+                </p>
+            )}
 
             <div className="d-flex justify-content-center">
                 <table className="table w-auto">
@@ -105,6 +138,7 @@ const Cart = () => {
                     type="button"
                     className="btn btn-dark"
                     disabled={!token}
+                    onClick={handleCheckout}
                 >
                     Pagar
                 </button>

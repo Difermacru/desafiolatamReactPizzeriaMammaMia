@@ -1,12 +1,18 @@
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext"
 
 export default function Profile() {
+
+  const { email, logout, getProfile } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // Puedes dejarlo fijo para cumplir el requisito
-  const email = "usuario@correo.com";
+  useEffect(() => {
+    getProfile(); //Trae el usuario real
+  }, []);
 
   const cerrar = () => {
+    logout();
     navigate("/login");
   };
 
